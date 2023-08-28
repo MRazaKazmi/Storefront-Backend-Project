@@ -7,7 +7,7 @@
     "start": "node dist/server.js",
     "build": "npx tsc --outDir ./dist",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
-    "test": "jasmine-ts",
+    "test": "ENV=test db-migrate down -e test -c 4 && db-migrate up -e test -c 4&& jasmine-ts",
     "jasmine": "jasmine",
     "tsc": "tsc"
   },
