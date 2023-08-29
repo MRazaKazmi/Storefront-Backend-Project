@@ -41,7 +41,7 @@ describe("GET /users == index", () => {
 describe("GET /users/:id", () => {
     it("should return a 200 response when all is well", async () => {
         const response = await request
-            .get("/users/2}")
+            .get("/users/3")
             .set("Authorization", `Bearer ${token}`);
         expect(response.status).toBe(200);
     });
@@ -58,5 +58,5 @@ describe("GET /users/:id", () => {
     });
 });
 afterAll(async () => {
-    await UserStoreInstance.delete(2);
+    await UserStoreInstance.delete(3);
 });

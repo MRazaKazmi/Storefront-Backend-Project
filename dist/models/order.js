@@ -43,11 +43,11 @@ class OrderStore {
             throw err;
         }
     }
-    async show(orderId) {
+    async show(userId) {
         const conn = await database_1.default.connect();
         try {
-            const sql = 'SELECT * FROM orders WHERE id=$1';
-            const result = await conn.query(sql, [orderId]);
+            const sql = 'SELECT * FROM orders WHERE user_id=$1';
+            const result = await conn.query(sql, [userId]);
             conn.release();
             return result.rows[0];
         }

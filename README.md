@@ -52,3 +52,48 @@ Add JWT functionality as shown in the course. Make sure that JWTs are required f
 Before submitting, make sure that your project is complete with a `README.md`. Your `README.md` must include instructions for setting up and running your project including how you setup, run, and connect to your database. 
 
 Before submitting your project, spin it up and test each endpoint. If each one responds with data that matches the data shapes from the `REQUIREMENTS.md`, it is ready for submission!
+
+### Setting up the environment
+```POSTGRES_HOST=127.0.0.1
+POSTGRES_DB=storedb
+POSTGRES_TEST_DB=storedb_test
+POSTGRES_USER=myuser
+POSTGRES_PASSWORD=mypass
+BCRYPT_PASSWORD=speak-friend-and-enter
+SALT_ROUNDS=10
+TOKEN_SECRET=abc123!
+ENV=dev```
+
+
+### Database Schema
+
+- Products (
+  id    SERIAL PRIMARY KEY,
+  name  VARCHAR(250) NOT NULL,
+  price INTEGER      NOT NULL
+);
+
+-  Users (
+  id              SERIAL PRIMARY KEY,
+  username        VARCHAR(250) NOT NULL,
+  firstname       VARCHAR(250) NOT NULL,
+  lastname        VARCHAR(250) NOT NULL,
+  password_digest VARCHAR(250) NOT NULL
+);
+
+- Orders (
+  id      SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users (id),
+  status  BOOLEAN NOT NULL
+);
+
+- Order Products (
+  order_id   INTEGER NOT NULL REFERENCES orders (id),
+  product_id INTEGER NOT NULL REFERENCES products (id),
+  quantity   INTEGER NOT NULL
+);
+
+### Database Creation
+
+`CREATE DATABASE storedb;`
+`CREATE DATABASE ;storedb_test`

@@ -19,7 +19,7 @@ const create = async (req: Request, res: Response) => {
   try {
     let products = req.body.products as unknown as OrderProduct[]
     const status = req.body.status as unknown as boolean
-    const user_id = req.body.user_id as unknown as number
+    const user_id = req.body.user_id as number
 
     if (products === undefined || status === undefined || user_id === undefined) {
       res.status(400)
