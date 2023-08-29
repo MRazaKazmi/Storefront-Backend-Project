@@ -70,7 +70,7 @@ export class UserStore {
         }
     }
 
-    async show(userId: string): Promise<User> {
+    async show(userId: number): Promise<User> {
         const conn = await client.connect();
 
         try {
@@ -87,6 +87,24 @@ export class UserStore {
             throw err;
         }
     }
+
+    async delete(userId: number): Promise<User> {
+        try {
+          const sql = "DELETE FROM users WHERE id = $1";
+          const conn = await client.connect();
+    
+          const result = await conn.query(sql, [userId]);
+    
+          const user = result.rows[0];
+    
+          conn.release();
+    
+          return user;
+        } catch (err) {
+          throw new Error(`Could not delete user ${userId}. Error: ${err}`);
+        }
+      }
+    
 }
 
 

@@ -27,7 +27,7 @@ const create = async (req: Request, res: Response) => {
       return false
     }
 
-    const order: Order = await OrderStoreInstance.create({products, status, user_id})
+    const order: Order = await OrderStoreInstance.create(user_id)
 
     res.json(order)
   } catch (e) {
@@ -46,7 +46,7 @@ const read = async (req: Request, res: Response) => {
       return false
     }
 
-    const order: Order = await OrderStoreInstance.read(id)
+    const order: Order = await OrderStoreInstance.show(id)
 
     res.json(order)
   } catch (e) {

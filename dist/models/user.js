@@ -61,5 +61,18 @@ class UserStore {
             throw err;
         }
     }
+    async delete(userId) {
+        try {
+            const sql = "DELETE FROM users WHERE id = $1";
+            const conn = await database_1.default.connect();
+            const result = await conn.query(sql, [userId]);
+            const user = result.rows[0];
+            conn.release();
+            return user;
+        }
+        catch (err) {
+            throw new Error(`Could not delete user ${userId}. Error: ${err}`);
+        }
+    }
 }
 exports.UserStore = UserStore;

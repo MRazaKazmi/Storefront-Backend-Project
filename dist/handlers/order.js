@@ -23,7 +23,7 @@ const create = async (req, res) => {
             res.send("Some required parameters are missing! eg. :products, :status, :user_id");
             return false;
         }
-        const order = await OrderStoreInstance.create({ products, status, user_id });
+        const order = await OrderStoreInstance.create(user_id);
         res.json(order);
     }
     catch (e) {
@@ -39,7 +39,7 @@ const read = async (req, res) => {
             res.send("Missing required parameter :id.");
             return false;
         }
-        const order = await OrderStoreInstance.read(id);
+        const order = await OrderStoreInstance.show(id);
         res.json(order);
     }
     catch (e) {

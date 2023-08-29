@@ -39,7 +39,7 @@ const create = async (req: Request, res: Response) => {
 
 const read = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id as unknown as string
+    const id = req.params.id as unknown as number
 
     if (id === undefined) {
       res.status(400)

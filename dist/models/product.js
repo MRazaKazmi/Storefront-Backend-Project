@@ -43,5 +43,18 @@ class ProductStore {
             throw new Error(`Could not find product ${id}. ${err}`);
         }
     }
+    async delete(id) {
+        try {
+            const sql = "DELETE FROM products where id = $1 RETURNING *";
+            const conn = await database_1.default.connect();
+            const result = await conn.query(sql, [id]);
+            const product = result.rows[0];
+            conn.release();
+            return product;
+        }
+        catch (err) {
+            throw new Error(`Could not delete this product ${id}. Error: ${err}`);
+        }
+    }
 }
 exports.ProductStore = ProductStore;

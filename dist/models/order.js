@@ -6,67 +6,92 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderStore = void 0;
 const database_1 = __importDefault(require("../database"));
 class OrderStore {
+    async create(userId) {
+        const conn = await database_1.default.connect();
+        const status = true;
+        try {
+            let sql = 'SELECT * FROM orders WHERE user_id=$1 AND status=$2';
+            let result = await conn.query(sql, [userId, status]);
+            if (result.rows.length === 0) {
+                sql =
+                    'INSERT INTO orders (user_id, status) VALUES ($1, $2) RETURNING *';
+                result = await conn.query(sql, [userId, status]);
+                conn.release();
+                return result.rows[0];
+            }
+            else {
+                throw new Error('Cannot create two open orders(cart) for single user');
+            }
+        }
+        catch (err) {
+            conn.release();
+            console.log('Failed to create new order', err);
+            throw err;
+        }
+    }
     async index() {
+        const conn = await database_1.default.connect();
         try {
-            const connection = await database_1.default.connect();
-            const sql = "SELECT * FROM orders";
-            const { rows } = await connection.query(sql);
-            const orderProductsSql = "SELECT product_id, quantity FROM order_products WHERE order_id=($1)";
-            const orders = [];
-            for (const order of rows) {
-                const { rows: orderProductRows } = await connection.query(orderProductsSql, [order.id]);
-                orders.push({
-                    ...order,
-                    products: orderProductRows
-                });
-            }
-            connection.release();
-            return orders;
+            const sql = 'SELECT * FROM orders';
+            const result = await conn.query(sql);
+            conn.release();
+            return result.rows;
         }
         catch (err) {
-            throw new Error(`Could not get orders. ${err}`);
+            conn.release();
+            console.log('Failed to fetch the orders', err);
+            throw err;
         }
     }
-    async create(order) {
-        const { products, status, user_id } = order;
+    async show(orderId) {
+        const conn = await database_1.default.connect();
         try {
-            const sql = "INSERT INTO orders (user_id, status) VALUES($1, $2) RETURNING *";
-            const connection = await database_1.default.connect();
-            const { rows } = await connection.query(sql, [user_id, status]);
-            const order = rows[0];
-            const orderProductsSql = "INSERT INTO order_products (order_id, product_id, quantity) VALUES($1, $2, $3) RETURNING product_id, quantity";
-            const orderProducts = [];
-            for (const product of products) {
-                const { product_id, quantity } = product;
-                const { rows } = await connection.query(orderProductsSql, [order.id, product_id, quantity]);
-                orderProducts.push(rows[0]);
-            }
-            connection.release();
-            return {
-                ...order,
-                products: orderProducts
-            };
+            const sql = 'SELECT * FROM orders WHERE id=$1';
+            const result = await conn.query(sql, [orderId]);
+            conn.release();
+            return result.rows[0];
         }
         catch (err) {
-            throw new Error(`Could not add new order for user ${user_id}. ${err}`);
+            conn.release();
+            console.log('Failed to fetch the order details', err);
+            throw err;
         }
     }
-    async read(id) {
+    async addProduct(orderid, productid, quantity) {
+        const conn = await database_1.default.connect();
         try {
-            const sql = "SELECT * FROM orders WHERE id=($1)";
+            let sql = 'SELECT * FROM orders WHERE id=$1';
+            let result = await conn.query(sql, [orderid]);
+            if (result.rows.length && result.rows[0].status === true) {
+                sql =
+                    'INSERT INTO order_products (order_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *';
+                result = await conn.query(sql, [orderid, productid, quantity]);
+                conn.release();
+                return result.rows[0];
+            }
+            else {
+                throw new Error('Order not found or order is not open');
+            }
+        }
+        catch (err) {
+            conn.release();
+            console.log('Failed to add the product details into order', err);
+            throw err;
+        }
+    }
+    async deleteOrder(id) {
+        try {
             const connection = await database_1.default.connect();
+            const orderProductsSql = "DELETE FROM order_products WHERE order_id=($1)";
+            await connection.query(orderProductsSql, [id]);
+            const sql = "DELETE FROM orders WHERE id=($1)";
             const { rows } = await connection.query(sql, [id]);
             const order = rows[0];
-            const orderProductsSql = "SELECT product_id, quantity FROM order_products WHERE order_id=($1)";
-            const { rows: orderProductRows } = await connection.query(orderProductsSql, [id]);
             connection.release();
-            return {
-                ...order,
-                products: orderProductRows
-            };
+            return order;
         }
         catch (err) {
-            throw new Error(`Could not find order ${id}. ${err}`);
+            throw new Error(`Could not delete order ${id}. ${err}`);
         }
     }
 }
