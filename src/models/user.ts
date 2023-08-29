@@ -11,7 +11,7 @@ const secret = process.env.JWT_SECRET as string;
 
 
 export type User = {
-    id?: string;
+    id?: number;
     username: string;
     firstname: string;
     lastname: string;
