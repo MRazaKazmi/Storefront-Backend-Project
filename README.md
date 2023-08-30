@@ -100,5 +100,5 @@ ENV=dev
 ### Database Creation
 ```
 `CREATE DATABASE storedb;`
-`CREATE DATABASE storedb_test`
+`CREATE DATABASE storedb_test;`
 ```
