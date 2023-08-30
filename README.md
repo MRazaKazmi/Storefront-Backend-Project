@@ -17,10 +17,10 @@ ENV=dev
 ```
 ### Setting up, starting and testing the app
 
-`npm install` to install the required packages
-`npm run build` to build the app
-`npm run start` to start the app
-`npm run test` to run all the tests
+- `npm install` to install the required packages, 
+- `npm run build` to build the app, 
+- `npm run start` to start the app, 
+- `npm run test` to run all the tests
 
 ### Database Schema
 ```
