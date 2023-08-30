@@ -55,6 +55,7 @@ Before submitting your project, spin it up and test each endpoint. If each one r
 
 ### Setting up the environment
 ```POSTGRES_HOST=127.0.0.1
+POSTGRES_PORT=5432
 POSTGRES_DB=storedb
 POSTGRES_TEST_DB=storedb_test
 POSTGRES_USER=myuser
