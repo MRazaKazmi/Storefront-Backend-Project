@@ -54,7 +54,8 @@ Before submitting, make sure that your project is complete with a `README.md`. Y
 Before submitting your project, spin it up and test each endpoint. If each one responds with data that matches the data shapes from the `REQUIREMENTS.md`, it is ready for submission!
 
 ### Setting up the environment
-```POSTGRES_HOST=127.0.0.1
+```
+POSTGRES_HOST=127.0.0.1
 POSTGRES_PORT=5432
 POSTGRES_DB=storedb
 POSTGRES_TEST_DB=storedb_test
@@ -63,11 +64,12 @@ POSTGRES_PASSWORD=mypass
 BCRYPT_PASSWORD=speak-friend-and-enter
 SALT_ROUNDS=10
 TOKEN_SECRET=abc123!
-ENV=dev```
+ENV=dev
+```
 
 
 ### Database Schema
-
+```
 - Products (
   id    SERIAL PRIMARY KEY,
   name  VARCHAR(250) NOT NULL,
@@ -93,8 +95,10 @@ ENV=dev```
   product_id INTEGER NOT NULL REFERENCES products (id),
   quantity   INTEGER NOT NULL
 );
+```
 
 ### Database Creation
-
+```
 `CREATE DATABASE storedb;`
 `CREATE DATABASE ;storedb_test`
+```
